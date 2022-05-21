@@ -76,7 +76,7 @@ public class PlaceholderHook extends PluginHook<DuelsPlugin> {
                 return String.valueOf(user.getLosses());
             } else if (identifier.equalsIgnoreCase("can_request")) {
                 return String.valueOf(user.canRequest());
-            } else if (identifier.contains("arena_")) { //arena_world_X_Y_Z
+            } else if (identifier.contains("arena_")) { //arena_world_X_Y_Z (placeholder: %duels_arena_world_X_Y_Z%)
                 String[] loc = identifier.split("_");
                 //loc[0] = arena_
                 World world = Bukkit.getWorld(loc[1]);
@@ -87,6 +87,28 @@ public class PlaceholderHook extends PluginHook<DuelsPlugin> {
                 QueueSignManagerImpl qsm = (QueueSignManagerImpl) plugin.find("QueueSignManagerImpl");
                 Queue queue = qsm.get(signLocation).getQueue();
                 return queue.getPlayersInMatch() + " / " + queue.getQueuedPlayers().size();
+            } else if (identifier.contains("arena-inmatch_")) { //arena-inmatch_world_X_Y_Z (placeholder: %duels_arena-inmatch_world_X_Y_Z%)
+                String[] loc = identifier.split("_");
+                //loc[0] = arena-inmatch
+                World world = Bukkit.getWorld(loc[1]);
+                double x = Double.parseDouble(loc[2]);
+                double y = Double.parseDouble(loc[3]);
+                double z = Double.parseDouble(loc[4]);
+                Location signLocation = new Location(world, x, y, z);
+                QueueSignManagerImpl qsm = (QueueSignManagerImpl) plugin.find("QueueSignManagerImpl");
+                Queue queue = qsm.get(signLocation).getQueue();
+                return String.valueOf(queue.getPlayersInMatch());
+            } else if (identifier.contains("arena-queued_")) { //arena-queued_world_X_Y_Z (placeholder: %duels_arena-queued_world_X_Y_Z%)
+                String[] loc = identifier.split("_");
+                //loc[0] = arena-queued
+                World world = Bukkit.getWorld(loc[1]);
+                double x = Double.parseDouble(loc[2]);
+                double y = Double.parseDouble(loc[3]);
+                double z = Double.parseDouble(loc[4]);
+                Location signLocation = new Location(world, x, y, z);
+                QueueSignManagerImpl qsm = (QueueSignManagerImpl) plugin.find("QueueSignManagerImpl");
+                Queue queue = qsm.get(signLocation).getQueue();
+                return String.valueOf(queue.getQueuedPlayers().size());
             }
 
             return null;
